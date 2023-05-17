@@ -1,0 +1,331 @@
+\documentclass[11pt]{article}
+
+% --------------------------------------------------------
+% PACKAGES
+
+% backend
+\usepackage{etoolbox}
+\usepackage[utf8]{inputenc}
+
+% general layout
+\usepackage[margin=0.75in]{geometry}
+\usepackage{pgfpages}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{morefloats}
+\usepackage[section]{placeins}
+\usepackage{setspace}
+\usepackage{changepage}
+\usepackage[format=plain]{caption}
+\usepackage{subcaption}
+\usepackage{lscape}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{hanging}
+\usepackage{subfiles}
+
+% typesetting
+\usepackage[hidelinks]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{cancel}
+\usepackage{microtype}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mdwlist}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{lmodern}
+\usepackage{lipsum}
+\usepackage{blindtext}
+\usepackage{verbatim}
+\usepackage{verbatimbox}
+\usepackage{comment}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{sgame}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{soul}
+\usepackage{listings}
+
+% math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amscd}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{mathdots}
+\usepackage[super]{nth}
+\usepackage[scientific-notation=false]{siunitx}
+\usepackage{empheq}
+
+% table
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[flushleft]{threeparttable}
+\usepackage{dcolumn}
+\usepackage{colortbl}
+\usepackage{longtable}
+
+% graphics
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage[space]{grffile}
+\usepackage{tikz}
+\usepackage{wrapfig}
+
+% citations
+\usepackage[date=year, 
+	style=authoryear, 
+	backend=biber, 
+	natbib=true, 
+	hyperref=true, 
+	uniquelist=minyear, 
+	uniquename=false, 
+	giveninits=false, 
+	maxcitenames=2, 
+	maxbibnames=99, 
+	url=false, 
+	doi=false, 
+	isbn=false]{biblatex}
+\usepackage{cleveref}
+
+% footnotes
+% multiple - add comma between footnotes
+% bottom - force footnotes to bottom of page
+% hang - margin between footnote number and text
+\usepackage[multiple, bottom, hang]{footmisc}
+
+% appendix
+\usepackage[toc, page]{appendix}
+
+% --------------------------------------------------------
+% DOCUMENT SETTINGS
+
+% link format
+\hypersetup{
+	colorlinks=false, 
+	linkcolor=blue, 
+	linkbordercolor={0 0 1}, 
+	citecolor=blue, 
+	filecolor=blue, 
+	urlcolor=blue
+}
+
+% code format
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+\lstset{framextopmargin=50pt,frame=bottomline}
+
+% pgfplots version
+\pgfplotsset{compat=1.18}
+
+% font sizes
+\renewcommand{\footnotesize}{\scriptsize}
+
+% spacing
+\setlength{\parindent}{8ex}
+\setlength{\parskip}{0ex}
+\onehalfspacing
+\renewcommand{\arraystretch}{1.2}
+
+% path to graphics files
+%\graphicspath{{../figures/}}
+
+% section format
+\titlespacing*\section{0pt}{10 pt}{10 pt}
+\titlespacing*\subsection{0pt}{10 pt}{10 pt}
+\titleformat{\section}{\normalfont\fontsize{12}{15}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\fontsize{12}{15}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\itshape\fontsize{11}{15}\itshape}{\thesubsubsection}{1em}{}  
+
+% draft watermark
+%\usepackage{draftwatermark}
+%\SetWatermarkText{Preliminary and not for circulation or citation}
+%\SetWatermarkScale{2}
+%\SetWatermarkLightness{.9}
+
+% penalties
+\clubpenalty=10000
+\widowpenalty=10000
+\hyphenpenalty=10000
+
+% --------------------------------------------------------
+% USER-WRITTEN COMMANDS
+
+% indent
+\newcommand{\tab}{\hspace*{.2em}}
+
+% subtitle
+\newcommand{\subtitle}[1]{%
+	\posttitle{%
+		\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em}%
+}
+
+% footnote in table/figure
+\newcommand\fnote[1]{\captionsetup{font=scriptsize}\caption*{#1}}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+% custom math
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+\newcommand{\diag}{\mathrm{diag}}
+\newcommand{\inner}[1]{\langle#1\rangle}
+\newcommand{\widebar}[1]{\mathop{\overline{#1}}}
+\newcommand{\partialf}[2]{\frac{\partial #1}{\partial #2}}
+
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newtheorem*{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption}
+
+% wide itemize
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{7pt}}{\enditemize}
+
+% table columns
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}m{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}m{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}m{#1}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+
+% multicolumn shortcut
+\newcommand\mc[1]{\multicolumn{1}{c}{#1}}
+
+% --------------------------------------------------------
+% BIBLIOGRAPHY
+
+% update .bib file
+%\addbibresource{references.bib}
+
+% formatting
+\AtEveryBibitem{\clearlist{language}}
+\AtEveryCitekey{\UseBibitemHook}
+\renewbibmacro{in:}{}
+
+% add cite aliases
+%\defcitealias{longreferenceYYYY}{Abbr. (YYYY)}
+
+% --------------------------------------------------------
+% MAIN DOCUMENT
+
+\begin{document}
+	
+	\title{Title\thanks{Title footnote}\vspace{5ex}}
+	
+	\author{
+		Author 1\thanks{Author 1 footnote}
+		\and
+		Author 2\thanks{Author 2 footnote}
+		\vspace{5ex}
+	}
+	
+	\date{Date}
+	
+	\maketitle
+	\thispagestyle{empty}
+	\setcounter{page}{0}
+	
+	\begin{singlespace}
+		\begin{abstract}
+			\noindent Abstract text
+			
+			\bigskip
+			
+			\noindent JEL Classification:
+			
+			\bigskip
+			
+			\noindent Keywords:
+		\end{abstract}
+	\end{singlespace}
+	
+	\newpage
+	
+	% --------------------------------------------------------
+	% MAIN TEXT
+	
+	\section{Introduction}\label{intro}
+	
+		\lipsum[1-2]
+	
+	\section{Background}\label{background}
+	
+		\lipsum[1-1]
+		
+	\subsection{Text}
+	
+		\lipsum[1-1]
+		
+	\subsubsection{Text}
+	
+		\lipsum[1-1]
+		
+	\section{Data}\label{data}
+
+		\lipsum[1-1]
+		
+	\section{Identification Strategy}\label{identification}
+	
+		\lipsum[1-1]
+		
+	\section{Results}\label{results}
+	
+		\lipsum[1-1]
+		
+	\section{Conclusion}\label{conclusion}
+	
+		\lipsum[1-1]
+		
+	\section{Tables}\label{tables}
+		
+	\section{Figures}\label{figures}
+	
+	%\printbibliography
+	
+	% --------------------------------------------------------
+	% APPENDIX
+	\newpage
+	\appendix
+	
+	\begin{center} \section*{\hfill Appendix \hfill} \end{center}
+	
+	% APPENDIX A
+	\setcounter{table}{0}
+	\renewcommand{\thetable}{A\arabic{table}}
+	\setcounter{figure}{0}
+	\renewcommand{\thefigure}{A\arabic{figure}}
+	\setcounter{footnote}{0}
+	\renewcommand{\thefootnote}{A\arabic{footnote}}
+
+	%\subfile{sections/appendix_A}
+	
+\end{document}
